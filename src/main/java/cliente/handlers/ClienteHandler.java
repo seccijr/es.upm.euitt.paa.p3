@@ -1,6 +1,7 @@
 package cliente.handlers;
 
 import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.util.List;
@@ -343,7 +344,10 @@ public class ClienteHandler extends ClienteFrame {
      * @return void
      */
     public void menuItemNuevaProvinciaHandler() {
-        new NuevaProvinciaHandler(ClienteHandler.this);
+        String nuevaProvincia = JOptionPane.showInputDialog(ClienteHandler.this, "Teclee el nombre de la nueva provincia", "Nueva provincia", JOptionPane.PLAIN_MESSAGE);
+        if (nuevaProvincia != null && !nuevaProvincia.isEmpty()) {
+            crearNuevaProvincia(nuevaProvincia);
+        }
     }
 
     /**
