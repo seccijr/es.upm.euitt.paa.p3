@@ -1,6 +1,7 @@
 package cliente.frames;
 
 import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -31,7 +32,6 @@ public class ClienteFrame extends JFrame {
     protected JMenuItem menuItemMoverPoblacion;
     protected JMenuItem menuItemAcercaDe;
 
-    protected JPanel panelBotones;
     protected JPanel panelEstado;
     protected JPanel panelProvinciasPoblaciones;
     protected JPanel panelPredicciones;
@@ -42,6 +42,8 @@ public class ClienteFrame extends JFrame {
     protected JButton buttonNuevaPoblacion;
     protected JButton buttonActualizarPrediccion;
 
+    protected JToolBar toolBar;
+
     protected JLabel labelProvincias;
     protected JLabel labelPoblaciones;
     protected JLabel labelPredicciones;
@@ -49,11 +51,20 @@ public class ClienteFrame extends JFrame {
 
     protected DefaultListModel<String> listModelProvincias;
     protected DefaultListModel<String> listModelPoblaciones;
-    protected DefaultListModel<String> listModelPredicciones;
 
     protected JList<String> listProvincias;
     protected JList<String> listPoblaciones;
-    protected JList<String> listPredicciones;
+
+    protected JScrollPane listPaneProvincias;
+
+    private String[] columNamesPredicciones;
+    protected DefaultTableModel tableModelPredicciones;
+
+    protected JTable tablePredicciones;
+
+    protected JScrollPane tablePanePredicciones;
+
+    protected JSplitPane splitPaneProvinciasPredicciones;
 
 
     /**
@@ -73,6 +84,7 @@ public class ClienteFrame extends JFrame {
      *
      * @return void
      */
+    @SuppressWarnings("serial")
     private void initialize() {
         menuBar = new JMenuBar();
         menuArchivo = new JMenu("Archivo");
@@ -97,7 +109,6 @@ public class ClienteFrame extends JFrame {
         menuItemMoverPoblacion = new JMenuItem("Mover población");
         menuItemAcercaDe = new JMenuItem("Acerca de");
 
-        panelBotones = new JPanel();
         panelEstado = new JPanel();
         panelProvinciasPoblaciones = new JPanel();
         panelProvincias = new JPanel();
@@ -106,8 +117,22 @@ public class ClienteFrame extends JFrame {
 
         buttonActualizarPrediccion = new JButton(
                 "Actualizar predicción");
+        buttonActualizarPrediccion.setIcon(
+            new ImageIcon(ClienteFrame.class.getResource("/update.png"))
+        );
+        buttonActualizarPrediccion.setBackground(Color.WHITE);
         buttonNuevaProvincia = new JButton("Nueva provincia");
+        buttonNuevaProvincia.setIcon(
+            new ImageIcon(ClienteFrame.class.getResource("/new.png"))
+        );
+        buttonNuevaProvincia.setBackground(Color.WHITE);
         buttonNuevaPoblacion = new JButton("Nueva población");
+        buttonNuevaPoblacion.setIcon(
+            new ImageIcon(ClienteFrame.class.getResource("/new.png"))
+        );
+        buttonNuevaPoblacion.setBackground(Color.WHITE);
+
+        toolBar = new JToolBar("Barra de Herramientas");
 
         labelProvincias = new JLabel("Provincias:");
         labelPoblaciones = new JLabel("Poblaciones:");
@@ -116,11 +141,23 @@ public class ClienteFrame extends JFrame {
 
         listModelProvincias = new DefaultListModel<String>();
         listModelPoblaciones = new DefaultListModel<String>();
-        listModelPredicciones = new DefaultListModel<String>();
 
         listProvincias = new JList<String>(listModelProvincias);
         listPoblaciones = new JList<String>(listModelPoblaciones);
-        listPredicciones = new JList<String>(listModelPredicciones);
+
+
+        columNamesPredicciones = new String[] { "Fecha", "Temp. Mínima", "Temp. Máxima", "Icono", "Estado del Cielo" };
+
+        tableModelPredicciones = new DefaultTableModel(new Object[][]{}, columNamesPredicciones);
+
+        tablePredicciones = new JTable(tableModelPredicciones) {
+            @Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
+        };
+
+        tablePanePredicciones = new JScrollPane(tablePredicciones);
     }
 
     /**
@@ -155,12 +192,10 @@ public class ClienteFrame extends JFrame {
         menuBar.add(menuAyuda);
         setJMenuBar(menuBar);
 
-        panelBotones.setLayout (new FlowLayout(FlowLayout.LEFT));
-        panelBotones.setBackground(Color.lightGray);
-        panelBotones.add(buttonActualizarPrediccion);
-        panelBotones.add(buttonNuevaProvincia);
-        panelBotones.add(buttonNuevaPoblacion);
-        add(panelBotones, BorderLayout.NORTH);
+        toolBar.add(buttonActualizarPrediccion);
+        toolBar.add(buttonNuevaProvincia);
+        toolBar.add(buttonNuevaPoblacion);
+        add(toolBar, BorderLayout.NORTH);
 
         panelEstado.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelEstado.setBackground(Color.lightGray);
@@ -179,12 +214,19 @@ public class ClienteFrame extends JFrame {
         panelPoblaciones.add(listPoblaciones, BorderLayout.CENTER);
         panelProvinciasPoblaciones.add(panelPoblaciones, BorderLayout.CENTER);
 
-        add(panelProvinciasPoblaciones, BorderLayout.WEST);
+        listPaneProvincias = new JScrollPane(panelProvinciasPoblaciones);
 
         panelPredicciones.setLayout(new BorderLayout());
         panelPredicciones.add(labelPredicciones, BorderLayout.NORTH);
-        panelPredicciones.add(listPredicciones, BorderLayout.CENTER);
-        add(panelPredicciones, BorderLayout.CENTER);
+        panelPredicciones.add(tablePanePredicciones, BorderLayout.CENTER);
+
+        splitPaneProvinciasPredicciones = new JSplitPane(
+                JSplitPane.HORIZONTAL_SPLIT,
+                listPaneProvincias,
+                tablePanePredicciones
+        );
+        splitPaneProvinciasPredicciones.setDividerLocation(150);
+        add(splitPaneProvinciasPredicciones, BorderLayout.CENTER);
 
         panelEstado.add(labelEventos);
         add(panelEstado, BorderLayout.SOUTH);

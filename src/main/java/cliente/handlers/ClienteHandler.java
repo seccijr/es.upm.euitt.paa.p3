@@ -2,6 +2,7 @@ package cliente.handlers;
 
 import java.awt.event.*;
 import javax.swing.event.*;
+import javax.swing.table.*;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -42,7 +43,7 @@ public class ClienteHandler extends ClienteFrame {
         gestor = new GestorAEMET();
         initialize();
         setVisible(true);
-    }
+            }
 
     /**
      * Método auxiliar cerrar el programa
@@ -198,6 +199,20 @@ public class ClienteHandler extends ClienteFrame {
     }
 
     /**
+     * Borrar todos los elementos de una table
+     *
+     * @param  tableModel DefaultTableModel de la tabla
+     * @return void
+     */
+    private void clearTable(DefaultTableModel tableModel) {
+        if (tableModel.getRowCount() > 0) {
+            for (int i = tableModel.getRowCount() - 1; i > -1; i--) {
+                tableModel.removeRow(i);
+            }
+        }
+    }
+
+    /**
      * Vincula el componente de la lista de predicciones
      * con las predicciones disponibles para la población
      * seleccionada
@@ -209,17 +224,17 @@ public class ClienteHandler extends ClienteFrame {
     private void bindPredicciones(List<IPrediccion> predicciones, String nombre) {
         if (predicciones != null && !predicciones.isEmpty()) {
             labelPredicciones.setText("Predicciones de " + nombre);
-            listModelPredicciones.clear();
+            clearTable(tableModelPredicciones);
             for (IPrediccion prediccion: predicciones) {
-                StringBuilder info = new StringBuilder();
-                info.append(prediccion.getFecha());
-                info.append(", ");
-                info.append(prediccion.getTemperaturaMinima());
-                info.append("/");
-                info.append(prediccion.getTemperaturaMaxima());
-                info.append(", ");
-                info.append(prediccion.getEstadoCielo());
-                listModelPredicciones.addElement(info.toString());
+                Object[] info = new Object[] {
+                    prediccion.getFecha(),
+                    prediccion.getTemperaturaMinima(),
+                    prediccion.getTemperaturaMaxima(),
+                    prediccion.getIconoEstadoCielo(),
+                    prediccion.getEstadoCielo()
+                };
+
+                tableModelPredicciones.addRow(info);
             }
         }
     }
