@@ -1,21 +1,24 @@
 package cliente.frames;
 
 import java.awt.*;
+import javax.spring.*;
 
 
 public class NuevaPoblacionFrame extends Dialog {
     public static final long serialVersionUID = 45L;
     private int ancho = 400;
     private int alto = 180;
-    private String provincia;
+    protected String provincia;
+    protected String[] provincias;
 
     protected Panel panelEntradas;
     protected Panel panelBotones;
 
     protected TextField textPoblacion;
-    protected TextField textProvincia;
     protected TextField textHabitantes;
     protected TextField textCodigoAEMET;
+
+    protected JComboBox comboProvincias;
 
     protected Button buttonCrear;
     protected Button buttonCancelar;
@@ -33,8 +36,9 @@ public class NuevaPoblacionFrame extends Dialog {
      * @param provincia
      * @return void
      */
-    public NuevaPoblacionFrame(Window f, String provincia) {
+    public NuevaPoblacionFrame(Window f, String[] provincias, String provincia) {
         super(f, "Crear provincia", ModalityType.APPLICATION_MODAL);
+        this.provincias = provincias;
         this.provincia = provincia;
         initialize();
         setupLayout();
@@ -48,9 +52,14 @@ public class NuevaPoblacionFrame extends Dialog {
      */
     private void initialize() {
         textPoblacion = new TextField("", 30);
-        textProvincia = new TextField(provincia, 30);
         textHabitantes = new TextField("", 30);
         textCodigoAEMET = new TextField("", 30);
+
+        comboProvincias = new JComboBox(provincias);
+        if (provincia != null && !provincia.isEmpty()) {
+            comboProvincias.setSelectedItem(provincia);
+        }
+
         panelEntradas = new Panel();
         panelBotones = new Panel();
         buttonCancelar = new Button("Cancelar");

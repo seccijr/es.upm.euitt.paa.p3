@@ -357,12 +357,9 @@ public class ClienteHandler extends ClienteFrame {
      */
     public void menuItemNuevaPoblacionHandler() {
         String provincia = listProvincias.getSelectedValue();
-        if (provincia == null || provincia.isEmpty()) {
-            new AvisoFrame(ClienteHandler.this, "Seleccione una provincia porfavor");
-        }
-        else {
-            new NuevaPoblacionHandler(ClienteHandler.this, provincia);
-        }
+        Set<String> provinciasSet = almacen.getProvincias();
+        String[] provincias = provinciasSet.toArray(new String[provinciasSet.size()]);
+        new NuevaPoblacionHandler(ClienteHandler.this, provincias, provincia);
     }
 
     /**
