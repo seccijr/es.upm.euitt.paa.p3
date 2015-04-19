@@ -78,8 +78,7 @@ public class ClienteHandler extends ClienteFrame {
      * @param codigoAEMET distintivo de la provincia
      * @return void
      */
-    public void crearNuevaPoblacion(String nombre, int habitantes, String codigoAEMET) {
-        String provincia = listProvincias.getSelectedValue();
+    public void crearNuevaPoblacion(String nombre, String provincia, int habitantes, String codigoAEMET) {
         if (provincia.isEmpty()) {
             new AvisoFrame(ClienteHandler.this, "Seleccione una provincia porfavor");
         }
@@ -186,10 +185,11 @@ public class ClienteHandler extends ClienteFrame {
      *
      * @return void
      */
-    private void bindPredicciones() {
+    private boolean bindPredicciones() {
         List<IPrediccion> predicciones;
         String provincia = listProvincias.getSelectedValue();
         String nombre = listPoblaciones.getSelectedValue();
+        if (nombre == null) return false;
         IPoblacion poblacion = almacen.getPoblacion(provincia, nombre);
         predicciones = ((Poblacion)poblacion).getPredicciones();
         if (predicciones == null || predicciones.isEmpty()) {
@@ -197,6 +197,8 @@ public class ClienteHandler extends ClienteFrame {
         }
 
         bindPredicciones(predicciones, nombre);
+
+        return true;
     }
 
     /**

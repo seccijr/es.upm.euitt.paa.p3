@@ -24,8 +24,8 @@ public class NuevaPoblacionHandler extends NuevaPoblacionFrame {
      *                  pertenece la nueva población
      * @return void
      */
-    public NuevaPoblacionHandler(Window clienteHandler, String provincia) {
-        super(clienteHandler, provincia);
+    public NuevaPoblacionHandler(Window clienteHandler, String[] provincias, String provincia) {
+        super(clienteHandler, provincias, provincia);
         this.clienteHandler = (ClienteHandler)clienteHandler;
         initHandlers();
         bindHandlers();
@@ -59,7 +59,8 @@ public class NuevaPoblacionHandler extends NuevaPoblacionFrame {
                     new AvisoFrame(NuevaPoblacionHandler.this, "Debe proporcionar todos los campos");
                 }
                 else {
-                    clienteHandler.crearNuevaPoblacion(nombre, habitantes, codigoAEMET);
+                    String provincia = (String)comboProvincias.getSelectedItem();
+                    clienteHandler.crearNuevaPoblacion(nombre, provincia, habitantes, codigoAEMET);
                     closeWindow();
                 }
             }

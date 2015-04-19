@@ -1,7 +1,7 @@
 package cliente.frames;
 
 import java.awt.*;
-import javax.spring.*;
+import javax.swing.*;
 
 
 public class NuevaPoblacionFrame extends Dialog {
@@ -84,8 +84,7 @@ public class NuevaPoblacionFrame extends Dialog {
         panelEntradas.add(labelNombrePoblacion);
         panelEntradas.add(textPoblacion);
         panelEntradas.add(labelNombreProvincia);
-        panelEntradas.add(textProvincia);
-        textProvincia.setEditable(false);
+        panelEntradas.add(comboProvincias);
         panelEntradas.add(labelHabitantes);
         panelEntradas.add(textHabitantes);
         panelEntradas.add(labelCodigoAEMET);
